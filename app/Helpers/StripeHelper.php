@@ -7,7 +7,7 @@ namespace App\Helpers;
 use Stripe\Checkout\Session;
 use Stripe\Exception\ApiErrorException;
 
-class StripeHelper
+final readonly class StripeHelper
 {
     /**
      * @throws ApiErrorException
