@@ -56,7 +56,7 @@ final class StripeController extends Controller
         $checkoutSession = StripeHelper::createCheckoutSession(
             redirectUrl: $redirectUrl,
             productName: $request->product_name,
-            price: $request->price,
+            price: (int) $request->price,
             currency: 'try',
         );
 
