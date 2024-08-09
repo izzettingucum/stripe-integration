@@ -1,12 +1,8 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.app')
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('title', 'Payment Success')
 
-    <title>Laravel Stripe integration tutorial</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+@section('style')
     <style>
         .bg {
             background-color: #ffc72c;
@@ -17,16 +13,15 @@
             background-color: #f7c027;
         }
     </style>
-</head>
+@endsection
 
-<body>
-<div class="container text-center mt-5 pt-5">
-    <img src="{{ asset('check-circle.svg') }}" class="tick-img" alt="tick-img">
-    <h1 class="text-center">Thank you for making payment</h1>
-    <h3 class="text-center mt-3">{{ $successMessage }}</h3>
+@section('content')
+    <div class="container text-center mt-5 pt-5">
+        <img src="{{ asset('check-circle.svg') }}" class="tick-img" alt="tick-img">
+        <h1 class="text-center">Thank you for making payment</h1>
+        <h4 class="text-center mt-3">We sent your invoice to your email account : {{ $customer_email }}</h4>
+        <h6 class="text-center mt-3">{{ $success_message }}</h6>
 
-    <a href="{{ route(name: 'display.stripe.charge.page') }}" class="btn mt-5 bg">Continue Shopping</a>
-</div>
-</body>
-
-</html>
+        <a href="{{ route(name: 'display.stripe.charge.page') }}" class="btn mt-5 bg">Continue Shopping</a>
+    </div>
+@endsection
