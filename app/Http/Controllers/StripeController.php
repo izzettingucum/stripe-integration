@@ -31,16 +31,12 @@ final class StripeController extends Controller
      */
     final public function chargePayment(ChargePaymentRequest $request): RedirectResponse
     {
-        // Set the API key for Stripe
         Stripe::setApiKey(apiKey: config(key: 'services.stripe.secret_key'));
 
-        // Prepare the URL to redirect to after successful payment
         $redirectUrl = route(name: 'stripe.charge.success') . '?session_id={CHECKOUT_SESSION_ID}';
 
-        // Define a unique key for rate limiting based on the authenticated user's ID
         $rateLimiterKey = 'checkout:' . auth()->id();
 
-        // Check if the user has made too many payment attempts
         if (RateLimiter::tooManyAttempts(key: $rateLimiterKey, maxAttempts: 1)) {
             return redirect()->back()->withErrors(
                 provider: [
@@ -49,10 +45,8 @@ final class StripeController extends Controller
             );
         }
 
-        // Record the payment attempt to enforce rate limiting
         RateLimiter::hit(key: $rateLimiterKey, decaySeconds: 10);
 
-        // Create a new checkout session with Stripe
         $checkoutSession = StripeHelper::createCheckoutSession(
             redirectUrl: $redirectUrl,
             productName: $request->product_name,
@@ -60,7 +54,6 @@ final class StripeController extends Controller
             currency: 'try',
         );
 
-        // Redirect the user to the Stripe checkout page
         return redirect(to: $checkoutSession->url);
     }
 
@@ -79,13 +72,10 @@ final class StripeController extends Controller
      */
     final public function displaySuccessPage(SuccessPaymentRequest $request): View
     {
-        // Set the API key for Stripe
         Stripe::setApiKey(apiKey: config(key: 'services.stripe.secret_key'));
 
-        // Retrieve the Stripe session details using the provided session ID
         $stripeSession = Session::retrieve(id: $request->session_id);
 
-        // Return the view for the payment success page with customer email and success message
         return view(
             view: 'stripe.success',
             data: [
@@ -94,5 +84,4 @@ final class StripeController extends Controller
             ]
         );
     }
-
 }
